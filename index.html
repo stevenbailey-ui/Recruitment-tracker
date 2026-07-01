@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bring a Friend — Hackney RFC Girls Rugby</title>
+<title>Bring a Friend — Hackney RFC</title>
 <style>
   :root {
     --navy: #002046;
@@ -227,10 +227,10 @@
     font-family: "IBM Plex Mono", monospace;
   }
 
-  .funnel-step.contacted { border-top: 4px solid #8fae7c; }
-  .funnel-step.invited { border-top: 4px solid var(--gold); }
-  .funnel-step.attended { border-top: 4px solid #c97f3a; }
-  .funnel-step.joined { border-top: 4px solid var(--red); }
+  .funnel-step.contacted    { border-top: 4px solid #8fae7c; }
+  .funnel-step.letter-sent  { border-top: 4px solid var(--gold); }
+  .funnel-step.call-req     { border-top: 4px solid #c97f3a; }
+  .funnel-step.joined       { border-top: 4px solid var(--red); }
 
   /* Table */
   .table-wrap {
@@ -286,11 +286,10 @@
     background: var(--paper);
   }
 
-  .stage-select.s-logged { background: #f1f1ee; color: var(--ink-soft); }
-  .stage-select.s-contacted { background: #eaf2e5; color: #4a6b3a; }
-  .stage-select.s-invited { background: #fbeed0; color: #8a6312; }
-  .stage-select.s-attended { background: #fbe3cd; color: #9c5c1f; }
-  .stage-select.s-joined { background: #f3dedb; color: var(--red); }
+  .stage-select.s-contacted   { background: #eaf2e5; color: #4a6b3a; }
+  .stage-select.s-letter-sent { background: #fbeed0; color: #8a6312; }
+  .stage-select.s-call-req    { background: #fbe3cd; color: #9c5c1f; }
+  .stage-select.s-joined      { background: #f3dedb; color: var(--red); }
 
   .row-actions button {
     background: none;
@@ -378,10 +377,10 @@
 
 <header class="top">
   <div class="crest-row">
-    <span class="club">Hackney RFC · Girls Rugby</span>
+    <span class="club">Hackney RFC · Girls &amp; Boys Rugby</span>
   </div>
   <h1>Bring a Friend</h1>
-  <p class="subtitle">A tracker for the U11/U12 girls' recruitment drive. Every entry uses initials only — no full names, no contact details stored here.</p>
+  <p class="subtitle">A tracker for team recruitment drive. Every entry uses initials only — no full names, no contact details stored here.</p>
 </header>
 
 <main>
@@ -395,13 +394,13 @@
       <div class="count" id="countContacted">0</div>
       <div class="label">Contacted</div>
     </div>
-    <div class="funnel-step invited" data-yard="STAGE 2">
-      <div class="count" id="countInvited">0</div>
-      <div class="label">Invited</div>
+    <div class="funnel-step letter-sent" data-yard="STAGE 2">
+      <div class="count" id="countLetterSent">0</div>
+      <div class="label">Letter Sent</div>
     </div>
-    <div class="funnel-step attended" data-yard="STAGE 3">
-      <div class="count" id="countAttended">0</div>
-      <div class="label">Attended</div>
+    <div class="funnel-step call-req" data-yard="STAGE 3">
+      <div class="count" id="countCallReq">0</div>
+      <div class="label">Call Requested</div>
     </div>
     <div class="funnel-step joined" data-yard="STAGE 4">
       <div class="count" id="countJoined">0</div>
@@ -421,29 +420,61 @@
         <input type="text" id="prospect" maxlength="6" placeholder="e.g. J.M." required>
         <div class="hint">Use initials only — never a full name.</div>
 
+        <label for="gender">Gender</label>
+        <select id="gender" required>
+          <option value="Girl">Girl</option>
+          <option value="Boy">Boy</option>
+        </select>
+
+        <label for="team">Target team</label>
+        <select id="team" required>
+          <optgroup label="Mixed Minis">
+            <option value="U6">U6</option>
+            <option value="U7">U7</option>
+            <option value="U8">U8</option>
+            <option value="U9">U9</option>
+            <option value="U10">U10</option>
+            <option value="U11">U11</option>
+          </optgroup>
+          <optgroup label="Girls">
+            <option value="U12 Girls">U12 Girls</option>
+            <option value="U14 Girls">U14 Girls</option>
+            <option value="U16 Girls">U16 Girls</option>
+            <option value="U18 Girls">U18 Girls</option>
+          </optgroup>
+          <optgroup label="Boys">
+            <option value="U12 Boys">U12 Boys</option>
+            <option value="U13 Boys">U13 Boys</option>
+            <option value="U14 Boys">U14 Boys</option>
+            <option value="U15 Boys">U15 Boys</option>
+            <option value="U16 Boys">U16 Boys</option>
+            <option value="Colts">Colts</option>
+          </optgroup>
+        </select>
+
         <label for="relationship">Relationship</label>
         <select id="relationship">
           <option value="School friend">School friend</option>
+          <option value="Sport or youth club friend">Sport or youth club friend</option>
           <option value="Cousin">Cousin</option>
+          <option value="Sibling">Sibling</option>
           <option value="Neighbour">Neighbour</option>
-          <option value="Sibling's friend">Sibling's friend</option>
           <option value="Other">Other</option>
         </select>
 
-        <label for="school">School (optional)</label>
-        <input type="text" id="school" maxlength="40" placeholder="e.g. Mossbourne VPA">
+        <label for="school">School</label>
+        <input type="text" id="school" maxlength="40" placeholder="e.g. Mossbourne VPA" required>
 
-        <label for="stage">Starting stage</label>
+        <label for="stage">Stage</label>
         <select id="stage">
-          <option value="logged">Logged</option>
           <option value="contacted">Contacted</option>
-          <option value="invited">Invited</option>
-          <option value="attended">Attended</option>
+          <option value="letter-sent">Invitation letter sent</option>
+          <option value="call-req">Call from coach or club member requested</option>
           <option value="joined">Joined</option>
         </select>
 
-        <label for="bursary">
-          <input type="checkbox" id="bursary" style="width:auto; display:inline-block; vertical-align:middle; margin-right:6px;">
+        <label for="bursary" style="margin-top:16px; display:flex; align-items:center; gap:8px; cursor:pointer;">
+          <input type="checkbox" id="bursary" style="width:auto; flex-shrink:0;">
           Bursary mentioned at first contact
         </label>
 
@@ -466,6 +497,8 @@
             <tr>
               <th>Referrer</th>
               <th>Prospect</th>
+              <th>Gender</th>
+              <th>Team</th>
               <th>School</th>
               <th>Relationship</th>
               <th>Stage</th>
@@ -492,14 +525,13 @@
 
 <script>
 (function () {
-  const STORAGE_KEY = 'hrfc_bring_a_friend_v1';
-  const STAGES = ['logged', 'contacted', 'invited', 'attended', 'joined'];
+  const STORAGE_KEY = 'hrfc_bring_a_friend_v2';
+  const STAGES = ['contacted', 'letter-sent', 'call-req', 'joined'];
   const STAGE_LABELS = {
-    logged: 'Logged',
-    contacted: 'Contacted',
-    invited: 'Invited',
-    attended: 'Attended',
-    joined: 'Joined'
+    'contacted':   'Contacted',
+    'letter-sent': 'Invitation letter sent',
+    'call-req':    'Call from coach/club requested',
+    'joined':      'Joined'
   };
 
   function loadData() {
@@ -526,6 +558,16 @@
     return value.trim().toUpperCase().slice(0, 6);
   }
 
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str == null ? '' : str;
+    return div.innerHTML;
+  }
+
+  function stageClass(stage) {
+    return 's-' + stage;
+  }
+
   function render() {
     const body = document.getElementById('trackerBody');
     const empty = document.getElementById('emptyState');
@@ -544,14 +586,17 @@
 
     data.slice().reverse().forEach((row) => {
       const tr = document.createElement('tr');
+      const genderBg = row.gender === 'Boy' ? 'var(--navy-soft)' : 'var(--red)';
 
       tr.innerHTML = `
         <td><span class="initials-pill">${escapeHtml(row.referrer)}</span></td>
-        <td><span class="initials-pill" style="background:var(--red);">${escapeHtml(row.prospect)}</span></td>
-        <td>${escapeHtml(row.school || '—')}</td>
-        <td>${escapeHtml(row.relationship)}</td>
+        <td><span class="initials-pill" style="background:${genderBg};">${escapeHtml(row.prospect)}</span></td>
+        <td style="font-size:13px;">${escapeHtml(row.gender || '—')}</td>
+        <td style="font-size:13px; white-space:nowrap;">${escapeHtml(row.team || '—')}</td>
+        <td style="font-size:13px;">${escapeHtml(row.school || '—')}</td>
+        <td style="font-size:13px;">${escapeHtml(row.relationship)}</td>
         <td>
-          <select class="stage-select s-${row.stage}" data-id="${row.id}">
+          <select class="stage-select ${stageClass(row.stage)}" data-id="${row.id}">
             ${STAGES.map(s => `<option value="${s}" ${s === row.stage ? 'selected' : ''}>${STAGE_LABELS[s]}</option>`).join('')}
           </select>
         </td>
@@ -562,15 +607,16 @@
       body.appendChild(tr);
     });
 
-    // wire stage selects
     body.querySelectorAll('.stage-select').forEach(sel => {
       sel.addEventListener('change', (e) => {
         const id = e.target.getAttribute('data-id');
         const row = data.find(r => r.id === id);
         if (row) {
           row.stage = e.target.value;
+          // update colour class
+          e.target.className = 'stage-select ' + stageClass(row.stage);
           saveData(data);
-          render();
+          updateFunnel();
         }
       });
     });
@@ -590,40 +636,37 @@
   }
 
   function updateFunnel() {
-    const order = { logged: 0, contacted: 1, invited: 2, attended: 3, joined: 4 };
-    const reach = (min) => data.filter(r => order[r.stage] >= min).length;
-    document.getElementById('countContacted').textContent = reach(1);
-    document.getElementById('countInvited').textContent = reach(2);
-    document.getElementById('countAttended').textContent = reach(3);
-    document.getElementById('countJoined').textContent = reach(4);
-  }
-
-  function escapeHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = str == null ? '' : str;
-    return div.innerHTML;
+    const order = { 'contacted': 1, 'letter-sent': 2, 'call-req': 3, 'joined': 4 };
+    const reach = (min) => data.filter(r => (order[r.stage] || 0) >= min).length;
+    document.getElementById('countContacted').textContent  = reach(1);
+    document.getElementById('countLetterSent').textContent = reach(2);
+    document.getElementById('countCallReq').textContent    = reach(3);
+    document.getElementById('countJoined').textContent     = reach(4);
   }
 
   document.getElementById('addForm').addEventListener('submit', function (e) {
     e.preventDefault();
-    const referrer = sanitiseInitials(document.getElementById('referrer').value);
-    const prospect = sanitiseInitials(document.getElementById('prospect').value);
+    const referrer     = sanitiseInitials(document.getElementById('referrer').value);
+    const prospect     = sanitiseInitials(document.getElementById('prospect').value);
+    const gender       = document.getElementById('gender').value;
+    const team         = document.getElementById('team').value;
     const relationship = document.getElementById('relationship').value;
-    const school = document.getElementById('school').value.trim().slice(0, 40);
-    const stage = document.getElementById('stage').value;
-    const bursary = document.getElementById('bursary').checked;
+    const school       = document.getElementById('school').value.trim().slice(0, 40);
+    const stage        = document.getElementById('stage').value;
+    const bursary      = document.getElementById('bursary').checked;
 
-    if (!referrer || !prospect) return;
+    if (!referrer || !prospect || !school) return;
 
     // soft guard against accidental full names
-    if (referrer.replace(/[^A-Z]/g, '').length > 4 || prospect.replace(/[^A-Z]/g, '').length > 4) {
+    const letters = s => s.replace(/[^A-Z]/g, '').length;
+    if (letters(referrer) > 4 || letters(prospect) > 4) {
       const proceed = confirm('That looks longer than initials — are you sure this isn\'t a full name? Click OK to add anyway, or Cancel to edit.');
       if (!proceed) return;
     }
 
     const newRow = {
       id: 'p_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-      referrer, prospect, relationship, school, stage, bursary,
+      referrer, prospect, gender, team, relationship, school, stage, bursary,
       dateLogged: new Date().toISOString().slice(0, 10)
     };
 
@@ -636,9 +679,15 @@
 
   document.getElementById('exportBtn').addEventListener('click', function () {
     if (data.length === 0) { alert('No data to export yet.'); return; }
-    const headers = ['Referrer', 'Prospect', 'School', 'Relationship', 'Stage', 'Bursary mentioned', 'Date logged'];
-    const rows = data.map(r => [r.referrer, r.prospect, r.school, r.relationship, STAGE_LABELS[r.stage], r.bursary ? 'Yes' : 'No', r.dateLogged]);
-    const csv = [headers, ...rows].map(row => row.map(cell => `"${String(cell || '').replace(/"/g, '""')}"`).join(',')).join('\n');
+    const headers = ['Referrer', 'Prospect', 'Gender', 'Team', 'School', 'Relationship', 'Stage', 'Bursary mentioned', 'Date logged'];
+    const rows = data.map(r => [
+      r.referrer, r.prospect, r.gender || '', r.team || '', r.school,
+      r.relationship, STAGE_LABELS[r.stage] || r.stage,
+      r.bursary ? 'Yes' : 'No', r.dateLogged
+    ]);
+    const csv = [headers, ...rows]
+      .map(row => row.map(cell => `"${String(cell || '').replace(/"/g, '""')}"`).join(','))
+      .join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
