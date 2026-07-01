@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bring a Friend — Hackney RFC Girls Rugby</title>
+<style>
+  :root {
+    --navy: #002046;
+    --navy-soft: #0b2f5c;
+    --red: #b3372b;
+    --red-soft: #c4493d;
+    --gold: #d9a441;
+    --gold-soft: #f0d9a0;
+    --pitch: #e9efe6;
+    --pitch-line: #c7d4c1;
+    --paper: #faf8f3;
+    --ink: #1c2230;
+    --ink-soft: #5a6275;
+    --line: #dcd6c8;
+    --radius: 10px;
+    font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .utility { font-family: "IBM Plex Mono", "SF Mono", Consolas, monospace; }
+
+  header.top {
+    background: var(--navy);
+    color: #fff;
+    padding: 28px 32px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header.top::after {
+    content: "";
+    position: absolute;
+    right: -40px;
+    top: -60px;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, var(--gold-soft), transparent 65%);
+    opacity: 0.18;
+  }
+
+  .crest-row {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .crest-row .club {
+    font-family: "IBM Plex Mono", monospace;
+    letter-spacing: 0.18em;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+  }
+
+  h1 {
+    font-size: clamp(28px, 4vw, 40px);
+    margin: 6px 0 4px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .subtitle {
+    color: #c9d6e8;
+    font-size: 16px;
+    max-width: 640px;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 36px 24px 80px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+
+  @media (max-width: 880px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px;
+  }
+
+  .card h2 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--navy);
+    font-family: "IBM Plex Mono", monospace;
+    margin: 0 0 16px;
+    font-weight: 600;
+  }
+
+  label {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    margin: 14px 0 5px;
+    font-family: "IBM Plex Mono", monospace;
+  }
+
+  label:first-of-type { margin-top: 0; }
+
+  input[type="text"], select {
+    width: 100%;
+    padding: 9px 11px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-size: 15px;
+    font-family: inherit;
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  input[type="text"]:focus, select:focus {
+    outline: 2px solid var(--gold);
+    outline-offset: 1px;
+    border-color: var(--gold);
+  }
+
+  .hint {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  .btn {
+    margin-top: 20px;
+    width: 100%;
+    background: var(--red);
+    color: #fff;
+    border: none;
+    padding: 12px 16px;
+    border-radius: 7px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s ease;
+  }
+
+  .btn:hover { background: var(--red-soft); }
+  .btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--navy);
+    border: 1px solid var(--line);
+  }
+  .btn-secondary:hover { background: var(--pitch); }
+
+  /* Funnel */
+  .funnel {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  @media (max-width: 620px) {
+    .funnel { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .funnel-step {
+    background: var(--pitch);
+    border: 1px solid var(--pitch-line);
+    border-radius: var(--radius);
+    padding: 16px 14px;
+    position: relative;
+  }
+
+  .funnel-step::before {
+    content: attr(data-yard);
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    color: var(--ink-soft);
+    letter-spacing: 0.06em;
+  }
+
+  .funnel-step .count {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+    margin-bottom: 6px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .funnel-step .label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    font-family: "IBM Plex Mono", monospace;
+  }
+
+  .funnel-step.contacted { border-top: 4px solid #8fae7c; }
+  .funnel-step.invited { border-top: 4px solid var(--gold); }
+  .funnel-step.attended { border-top: 4px solid #c97f3a; }
+  .funnel-step.joined { border-top: 4px solid var(--red); }
+
+  /* Table */
+  .table-wrap {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  thead th {
+    text-align: left;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    padding: 8px 10px;
+    border-bottom: 2px solid var(--navy);
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 10px 10px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+  }
+
+  tbody tr:hover { background: var(--pitch); }
+
+  .initials-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: #fff;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .stage-select {
+    padding: 5px 8px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    font-size: 12px;
+    font-family: "IBM Plex Mono", monospace;
+    background: var(--paper);
+  }
+
+  .stage-select.s-logged { background: #f1f1ee; color: var(--ink-soft); }
+  .stage-select.s-contacted { background: #eaf2e5; color: #4a6b3a; }
+  .stage-select.s-invited { background: #fbeed0; color: #8a6312; }
+  .stage-select.s-attended { background: #fbe3cd; color: #9c5c1f; }
+  .stage-select.s-joined { background: #f3dedb; color: var(--red); }
+
+  .row-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-family: "IBM Plex Mono", monospace;
+    text-decoration: underline;
+    padding: 2px 4px;
+  }
+  .row-actions button:hover { color: var(--red); }
+
+  .empty-state {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--ink-soft);
+  }
+
+  .empty-state .big {
+    font-size: 40px;
+    margin-bottom: 8px;
+  }
+
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .toolbar-actions { display: flex; gap: 10px; }
+
+  .toolbar-actions button {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 7px 12px;
+    cursor: pointer;
+    color: var(--navy);
+  }
+  .toolbar-actions button:hover { background: var(--pitch); }
+
+  .gdpr-banner {
+    background: var(--pitch);
+    border: 1px solid var(--pitch-line);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+  .gdpr-banner strong { color: var(--navy); }
+
+  footer {
+    text-align: center;
+    padding: 30px 24px 50px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    font-family: "IBM Plex Mono", monospace;
+    border-top: 1px solid var(--line);
+    margin-top: 40px;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap; border: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="crest-row">
+    <span class="club">Hackney RFC · Girls Rugby</span>
+  </div>
+  <h1>Bring a Friend</h1>
+  <p class="subtitle">A tracker for the U11/U12 girls' recruitment drive. Every entry uses initials only — no full names, no contact details stored here.</p>
+</header>
+
+<main>
+
+  <div class="gdpr-banner">
+    <strong>Why initials only:</strong> this tool tracks prospects who are not yet club members, so we keep it light-touch by design. Use first-name initials (e.g. "J.K."), not full names. Never store phone numbers, emails, or addresses here — the referring parent makes contact peer-to-peer. Once a prospect joins the club, remove their row and register them properly in GMS.
+  </div>
+
+  <div class="funnel" id="funnel">
+    <div class="funnel-step contacted" data-yard="STAGE 1">
+      <div class="count" id="countContacted">0</div>
+      <div class="label">Contacted</div>
+    </div>
+    <div class="funnel-step invited" data-yard="STAGE 2">
+      <div class="count" id="countInvited">0</div>
+      <div class="label">Invited</div>
+    </div>
+    <div class="funnel-step attended" data-yard="STAGE 3">
+      <div class="count" id="countAttended">0</div>
+      <div class="label">Attended</div>
+    </div>
+    <div class="funnel-step joined" data-yard="STAGE 4">
+      <div class="count" id="countJoined">0</div>
+      <div class="label">Joined</div>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <h2>Log a prospect</h2>
+      <form id="addForm">
+        <label for="referrer">Referring player (initials)</label>
+        <input type="text" id="referrer" maxlength="6" placeholder="e.g. A.K." required>
+
+        <label for="prospect">Prospect (initials)</label>
+        <input type="text" id="prospect" maxlength="6" placeholder="e.g. J.M." required>
+        <div class="hint">Use initials only — never a full name.</div>
+
+        <label for="relationship">Relationship</label>
+        <select id="relationship">
+          <option value="School friend">School friend</option>
+          <option value="Cousin">Cousin</option>
+          <option value="Neighbour">Neighbour</option>
+          <option value="Sibling's friend">Sibling's friend</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <label for="school">School (optional)</label>
+        <input type="text" id="school" maxlength="40" placeholder="e.g. Mossbourne VPA">
+
+        <label for="stage">Starting stage</label>
+        <select id="stage">
+          <option value="logged">Logged</option>
+          <option value="contacted">Contacted</option>
+          <option value="invited">Invited</option>
+          <option value="attended">Attended</option>
+          <option value="joined">Joined</option>
+        </select>
+
+        <label for="bursary">
+          <input type="checkbox" id="bursary" style="width:auto; display:inline-block; vertical-align:middle; margin-right:6px;">
+          Bursary mentioned at first contact
+        </label>
+
+        <button type="submit" class="btn">Add prospect</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="toolbar">
+        <h2 style="margin:0;">Tracker — <span id="rowCount">0</span> prospects</h2>
+        <div class="toolbar-actions">
+          <button id="exportBtn" type="button">Export CSV</button>
+          <button id="clearBtn" type="button">Clear all</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table id="trackerTable">
+          <thead>
+            <tr>
+              <th>Referrer</th>
+              <th>Prospect</th>
+              <th>School</th>
+              <th>Relationship</th>
+              <th>Stage</th>
+              <th>Bursary</th>
+              <th>Logged</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="trackerBody"></tbody>
+        </table>
+        <div class="empty-state" id="emptyState">
+          <div class="big">🏉</div>
+          No prospects logged yet. Add the first one using the form.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  HACKNEY RFC · SPRING HILL · E5 9BL · DATA STORED LOCALLY IN THIS BROWSER ONLY
+</footer>
+
+<script>
+(function () {
+  const STORAGE_KEY = 'hrfc_bring_a_friend_v1';
+  const STAGES = ['logged', 'contacted', 'invited', 'attended', 'joined'];
+  const STAGE_LABELS = {
+    logged: 'Logged',
+    contacted: 'Contacted',
+    invited: 'Invited',
+    attended: 'Attended',
+    joined: 'Joined'
+  };
+
+  function loadData() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      console.error('Could not read tracker data', e);
+      return [];
+    }
+  }
+
+  function saveData(data) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {
+      alert('Could not save — your browser storage may be full or disabled.');
+    }
+  }
+
+  let data = loadData();
+
+  function sanitiseInitials(value) {
+    return value.trim().toUpperCase().slice(0, 6);
+  }
+
+  function render() {
+    const body = document.getElementById('trackerBody');
+    const empty = document.getElementById('emptyState');
+    const table = document.getElementById('trackerTable');
+    body.innerHTML = '';
+
+    document.getElementById('rowCount').textContent = data.length;
+
+    if (data.length === 0) {
+      table.style.display = 'none';
+      empty.style.display = 'block';
+    } else {
+      table.style.display = 'table';
+      empty.style.display = 'none';
+    }
+
+    data.slice().reverse().forEach((row) => {
+      const tr = document.createElement('tr');
+
+      tr.innerHTML = `
+        <td><span class="initials-pill">${escapeHtml(row.referrer)}</span></td>
+        <td><span class="initials-pill" style="background:var(--red);">${escapeHtml(row.prospect)}</span></td>
+        <td>${escapeHtml(row.school || '—')}</td>
+        <td>${escapeHtml(row.relationship)}</td>
+        <td>
+          <select class="stage-select s-${row.stage}" data-id="${row.id}">
+            ${STAGES.map(s => `<option value="${s}" ${s === row.stage ? 'selected' : ''}>${STAGE_LABELS[s]}</option>`).join('')}
+          </select>
+        </td>
+        <td>${row.bursary ? '✓' : '—'}</td>
+        <td class="utility" style="font-size:12px; color:var(--ink-soft);">${row.dateLogged}</td>
+        <td class="row-actions"><button data-id="${row.id}" class="deleteBtn">remove</button></td>
+      `;
+      body.appendChild(tr);
+    });
+
+    // wire stage selects
+    body.querySelectorAll('.stage-select').forEach(sel => {
+      sel.addEventListener('change', (e) => {
+        const id = e.target.getAttribute('data-id');
+        const row = data.find(r => r.id === id);
+        if (row) {
+          row.stage = e.target.value;
+          saveData(data);
+          render();
+        }
+      });
+    });
+
+    body.querySelectorAll('.deleteBtn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = e.target.getAttribute('data-id');
+        if (confirm('Remove this prospect from the tracker? This cannot be undone.')) {
+          data = data.filter(r => r.id !== id);
+          saveData(data);
+          render();
+        }
+      });
+    });
+
+    updateFunnel();
+  }
+
+  function updateFunnel() {
+    const order = { logged: 0, contacted: 1, invited: 2, attended: 3, joined: 4 };
+    const reach = (min) => data.filter(r => order[r.stage] >= min).length;
+    document.getElementById('countContacted').textContent = reach(1);
+    document.getElementById('countInvited').textContent = reach(2);
+    document.getElementById('countAttended').textContent = reach(3);
+    document.getElementById('countJoined').textContent = reach(4);
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str == null ? '' : str;
+    return div.innerHTML;
+  }
+
+  document.getElementById('addForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const referrer = sanitiseInitials(document.getElementById('referrer').value);
+    const prospect = sanitiseInitials(document.getElementById('prospect').value);
+    const relationship = document.getElementById('relationship').value;
+    const school = document.getElementById('school').value.trim().slice(0, 40);
+    const stage = document.getElementById('stage').value;
+    const bursary = document.getElementById('bursary').checked;
+
+    if (!referrer || !prospect) return;
+
+    // soft guard against accidental full names
+    if (referrer.replace(/[^A-Z]/g, '').length > 4 || prospect.replace(/[^A-Z]/g, '').length > 4) {
+      const proceed = confirm('That looks longer than initials — are you sure this isn\'t a full name? Click OK to add anyway, or Cancel to edit.');
+      if (!proceed) return;
+    }
+
+    const newRow = {
+      id: 'p_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+      referrer, prospect, relationship, school, stage, bursary,
+      dateLogged: new Date().toISOString().slice(0, 10)
+    };
+
+    data.push(newRow);
+    saveData(data);
+    render();
+    this.reset();
+    document.getElementById('referrer').focus();
+  });
+
+  document.getElementById('exportBtn').addEventListener('click', function () {
+    if (data.length === 0) { alert('No data to export yet.'); return; }
+    const headers = ['Referrer', 'Prospect', 'School', 'Relationship', 'Stage', 'Bursary mentioned', 'Date logged'];
+    const rows = data.map(r => [r.referrer, r.prospect, r.school, r.relationship, STAGE_LABELS[r.stage], r.bursary ? 'Yes' : 'No', r.dateLogged]);
+    const csv = [headers, ...rows].map(row => row.map(cell => `"${String(cell || '').replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `bring-a-friend-tracker-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  document.getElementById('clearBtn').addEventListener('click', function () {
+    if (data.length === 0) return;
+    if (confirm('This will permanently delete all logged prospects from this browser. Export a CSV first if you want a record. Continue?')) {
+      data = [];
+      saveData(data);
+      render();
+    }
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>
